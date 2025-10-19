@@ -12,8 +12,12 @@ spring:
             - Path=/auth/**
 
 server:
-  port: 8081
+  port: ${SERVER_PORT}
 
 secret:
   header:
     key: ${SECRET_HEADER_KEY}
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
