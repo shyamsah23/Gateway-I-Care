@@ -2,6 +2,7 @@ package com.example.Gateway_I_Care.Security;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
@@ -16,7 +17,10 @@ import reactor.core.publisher.Mono;
 public class JwtAuthFilter implements WebFilter {
 
     @Autowired
-    private static JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
+
+    @Value("${secret.header.key}")
+    private String secretKeyForHeader;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -25,7 +29,7 @@ public class JwtAuthFilter implements WebFilter {
 
         if (request.getURI().getPath().contains("/auth/user/login")
                 || request.getURI().getPath().contains("/auth/user/register")) {
-            return chain.filter(exchange);
+            return chain.filter(exchange.mutate().request(req -> req.header("X-secret-Key",secretKeyForHeader)).build());
         }
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -41,8 +45,8 @@ public class JwtAuthFilter implements WebFilter {
                     .mutate()
                     .header("X-User-Id", claims.get("userId").toString())
                     .header("X-Username", claims.getSubject())
+                    .header("X-Secret-Key",secretKeyForHeader)
                     .build();
-
             return chain.filter(exchange.mutate().request(modifiedRequest).build());
 
         } catch (Exception e) {
