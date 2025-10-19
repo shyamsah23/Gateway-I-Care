@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: Gateway-I-Care
+
+#  user service routes
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: ${USER_SERVICE_PATH}
+          predicates:
+            - Path=/auth/**
+
+server:
+  port: 8081
+
+
