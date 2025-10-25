@@ -24,7 +24,7 @@ spring:
             - Path=/api/mail/**
 
 server:
-  port: 8081
+  port: ${SERVER_PORT}
 
 secret:
   header:
@@ -34,3 +34,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
