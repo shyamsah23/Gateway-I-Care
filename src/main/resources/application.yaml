@@ -10,6 +10,18 @@ spring:
           uri: ${USER_SERVICE_PATH}
           predicates:
             - Path=/auth/**
+        - id: profile-service
+          uri : ${PROFILE_SERVICE_PATH}
+          predicates:
+            - Path=/profile/**
+        - id: appointment-service
+          uri: ${APPOINTMENT_SERVICE_PATH}
+          predicates:
+            - Path=/appointment/**
+        - id: notification-service
+          uri : ${NOTIFICATION_SERVICE_PATH}
+          predicates:
+            - Path=/api/mail/**
 
 server:
   port: ${SERVER_PORT}
@@ -18,6 +30,10 @@ secret:
   header:
     key: ${SECRET_HEADER_KEY}
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
