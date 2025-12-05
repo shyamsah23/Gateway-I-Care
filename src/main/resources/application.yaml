@@ -2,14 +2,28 @@ spring:
   application:
     name: Gateway-I-Care
 
-#  user service routes
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_UNIQUE
+
       routes:
         - id: user-service
           uri: ${USER_SERVICE_PATH}
           predicates:
             - Path=/auth/**
+        - id: profile-service
+          uri: ${PROFILE_SERVICE_PATH}
+          predicates:
+            - Path=/profile/**
+        - id: pharmacy-service
+          uri: ${PHARMACY_SERVICE_PATH}
+          predicates:
+            - Path=/pharmacy/**
+        - id: media-service
+          uri: ${MEDIA_SERVICE_PATH}
+          predicates:
+            - Path=/media/**
 
 server:
   port: ${SERVER_PORT}
