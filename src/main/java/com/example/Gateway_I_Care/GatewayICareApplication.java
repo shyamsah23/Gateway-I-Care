@@ -10,4 +10,5 @@ public class GatewayICareApplication {
 		SpringApplication.run(GatewayICareApplication.class, args);
 	}
 
+	
 }
