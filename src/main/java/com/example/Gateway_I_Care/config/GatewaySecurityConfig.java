@@ -11,11 +11,15 @@ public class GatewaySecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
         http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)   // correct modern way
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .cors(cors -> {})                                        // enable CORS
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/auth/user/**","/profile/doctor/**","/profile/patient/**").permitAll()
+                        .pathMatchers("/auth/user/**").permitAll()
                         .anyExchange().authenticated()
                 );
 
@@ -23,3 +27,4 @@ public class GatewaySecurityConfig {
     }
 
 }
+

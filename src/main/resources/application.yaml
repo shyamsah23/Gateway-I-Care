@@ -17,7 +17,7 @@ spring:
           predicates:
             - Path=/profile/**
         - id: pharmacy-service
-          uri: ${PHARMACY_SERVICE_PATH:http://localhost:8087}
+          uri: ${PHARMACY_SERVICE_PATH:http://localhost:9087}
           predicates:
             - Path=/pharmacy/**
         - id: media-service
