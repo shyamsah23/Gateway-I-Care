@@ -15,7 +15,7 @@ public class GatewaySecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)   // correct modern way
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers("/auth/user/login", "/auth/user/register").permitAll()
+                        .pathMatchers("/auth/user/**","/profile/doctor/**","/profile/patient/**").permitAll()
                         .anyExchange().authenticated()
                 );
 

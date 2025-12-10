@@ -16,10 +16,11 @@ public class GatewayCorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-        config.setAllowedHeaders(List.of("*", "X-SECRET-KEY"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(List.of("Authorization", "X-SECRET-KEY", "Content-Type", "Accept"));
         config.setExposedHeaders(List.of("X-SECRET-KEY"));
         config.setAllowCredentials(true);
+        config.setMaxAge(60L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
