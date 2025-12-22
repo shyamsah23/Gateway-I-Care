@@ -10,6 +10,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequest.Builder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -17,6 +22,8 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -66,23 +73,33 @@ public class JwtAuthFilter implements WebFilter {
         String jwtToken = authHeader.substring(7); // token without "Bearer "
 
         try {
-            // Validate token (JwtUtil should throw if invalid)
+            // Validate token
             Claims claims = jwtUtil.validateToken(jwtToken);
 
-            // Mutate request using WebFlux ServerHttpRequest.Builder (do not consume body)
+            // Build Authentication object
+            String username = claims.getSubject();
+            String role = claims.get("role", String.class);
+
+            List<GrantedAuthority> authorities =
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+            // Mutate request
             Builder mutatedBuilder = request.mutate();
-
-            // forward original Authorization header (important for downstream servlet services)
             mutatedBuilder.header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
-
-            // add your secret header
             mutatedBuilder.header(SECRET_HEADER_NAME, secretKeyForHeader);
 
             ServerHttpRequest modifiedRequest = mutatedBuilder.build();
 
-            log.debug("Token validated for subject={}, forwarding request to downstream", claims.getSubject());
+            log.debug("Token validated for subject={}, role={}", username, role);
 
-            return chain.filter(exchange.mutate().request(modifiedRequest).build());
+            return chain.filter(exchange.mutate().request(modifiedRequest).build())
+                    .contextWrite(
+                            ReactiveSecurityContextHolder.withAuthentication(authentication)
+                    );
+
         } catch (Exception e) {
             log.warn("Token validation failed for request {} {} : {}", request.getMethod(), path, e.getMessage());
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);

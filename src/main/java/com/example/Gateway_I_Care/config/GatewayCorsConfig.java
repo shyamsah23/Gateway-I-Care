@@ -20,7 +20,7 @@ public class GatewayCorsConfig {
         config.setAllowedHeaders(List.of("Authorization", "X-SECRET-KEY", "Content-Type", "Accept"));
         config.setExposedHeaders(List.of("X-SECRET-KEY"));
         config.setAllowCredentials(true);
-        config.setMaxAge(60L);
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
