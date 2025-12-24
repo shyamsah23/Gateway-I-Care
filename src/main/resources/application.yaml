@@ -6,32 +6,33 @@ spring:
     gateway:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_UNIQUE
-
-      routes:
-        - id: user-service
-          uri: ${USER_SERVICE_PATH}
-          predicates:
-            - Path=/auth/**
-        - id: profile-service
-          uri: ${PROFILE_SERVICE_PATH}
-          predicates:
-            - Path=/profile/**
-        - id: pharmacy-service
-          uri: ${PHARMACY_SERVICE_PATH:http://localhost:9087}
-          predicates:
-            - Path=/pharmacy/**
-        - id: media-service
-          uri: ${MEDIA_SERVICE_PATH:http://localhost:8088}
-          predicates:
-            - Path=/media/**
-        - id: appointment-service
-          uri: ${APPOINTMENT_SERVICE_PATH}
-          predicates:
-            - Path=/appointment/**
-        - id: notification-service
-          uri : ${NOTIFICATION_SERVICE_PATH}
-          predicates:
-            - Path=/api/mail/**
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: ${USER_SERVICE_PATH:http://localhost:8081}
+              predicates:
+                - Path=/auth/**
+            - id: profile-service
+              uri: ${PROFILE_SERVICE_PATH:http://localhost:8082}
+              predicates:
+                - Path=/profile/**
+            - id: pharmacy-service
+              uri: ${PHARMACY_SERVICE_PATH:http://localhost:8083}
+              predicates:
+                - Path=/pharmacy/**
+            - id: media-service
+              uri: ${MEDIA_SERVICE_PATH:http://localhost:8089}
+              predicates:
+                - Path=/media/**
+            - id: appointment-service
+              uri: ${APPOINTMENT_SERVICE_PATH:http://localhost:8086}
+              predicates:
+                - Path=/appointment/**
+            - id: notification-service
+              uri : ${NOTIFICATION_SERVICE_PATH:http://localhost:8085}
+              predicates:
+                - Path=/api/mail/**
 
 server:
   port: ${SERVER_PORT:8080}
