@@ -29,7 +29,6 @@ public class GatewaySecurityConfig {
                         ).authenticated()
                         .anyExchange().denyAll()
                 ).addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION);
-
         return http.build();
     }
 
