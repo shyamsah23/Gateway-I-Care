@@ -12,25 +12,18 @@ import org.springframework.stereotype.Component;
 public class GatewaySecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,JwtAuthFilter jwtAuthFilter) {
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
         http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)   // correct modern way
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)  
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .pathMatchers(
-                                "/auth/**"
-                        ).permitAll()
-                        .pathMatchers(
-                                "/profile/**",
-                                "/pharmacy/**",
-                                "/media/**",
-                                "/appointment/**",
-                                "/api/mail/**"
-                        ).authenticated()
-                        .anyExchange().denyAll()
-                ).addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+                        .pathMatchers("/auth/user/**").permitAll()
+                        .anyExchange().authenticated()
+                );
 
         return http.build();
     }
 
 }
+
