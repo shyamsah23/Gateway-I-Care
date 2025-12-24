@@ -12,7 +12,7 @@ public class GatewaySecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)   // correct modern way
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)  
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers("/auth/user/**","/profile/doctor/**","/profile/patient/**").permitAll()
