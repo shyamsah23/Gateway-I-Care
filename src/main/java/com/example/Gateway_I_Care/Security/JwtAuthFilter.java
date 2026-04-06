@@ -44,7 +44,8 @@ public class JwtAuthFilter implements WebFilter {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath() == null ? "" : request.getURI().getPath().toLowerCase();
         boolean isOptions = HttpMethod.OPTIONS.equals(request.getMethod());
-        boolean isLoginOrRegister = path.contains("/auth/user/login") || path.contains("/auth/user/register");
+        boolean isLoginOrRegister = path.contains("/auth/user/login") || path.contains("/auth/user/register") ||
+                path.contains("/forgot-password") || path.contains("/reset-password");
 
         // Bypass for login/register or preflight:still attach secret header and preserve Authorization if present
         if (isLoginOrRegister || isOptions) {
