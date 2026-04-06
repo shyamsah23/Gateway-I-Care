@@ -10,41 +10,37 @@ spring:
         webflux:
           routes:
             - id: user-service
-              uri: ${USER_SERVICE_PATH:http://localhost:8081}
+              uri: ${USER_SERVICE_PATH:http://user-service:8081}
               predicates:
                 - Path=/auth/**
             - id: profile-service
-              uri: ${PROFILE_SERVICE_PATH:http://localhost:8082}
+              uri: ${PROFILE_SERVICE_PATH:http://profile-service:8082}
               predicates:
                 - Path=/profile/**
             - id: pharmacy-service
-              uri: ${PHARMACY_SERVICE_PATH:http://localhost:8083}
+              uri: ${PHARMACY_SERVICE_PATH:http://pharmacy-service:8083}
               predicates:
                 - Path=/pharmacy/**
             - id: media-service
-              uri: ${MEDIA_SERVICE_PATH:http://localhost:8089}
+              uri: ${MEDIA_SERVICE_PATH:http://media-service:8089}
               predicates:
                 - Path=/media/**
             - id: appointment-service
-              uri: ${APPOINTMENT_SERVICE_PATH:http://localhost:8086}
+              uri: ${APPOINTMENT_SERVICE_PATH:http://appointment-service:8086}
               predicates:
                 - Path=/appointment/**
             - id: notification-service
-              uri : ${NOTIFICATION_SERVICE_PATH:http://localhost:8085}
+              uri : ${NOTIFICATION_SERVICE_PATH:http://notification-service:8085}
               predicates:
                 - Path=/api/mail/**
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:9090}
 
 secret:
   header:
     key: ${SECRET_HEADER_KEY}
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
 jwt:
   secret:
-    key: ${JWT_SECRET_KEY }
+    key: ${JWT_SECRET_KEY}

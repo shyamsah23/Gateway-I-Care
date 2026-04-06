@@ -18,7 +18,9 @@ public class GatewaySecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .pathMatchers(
-                                "/auth/**"
+                                "/auth/**",
+                                "/forgot-password/**",
+                                "/reset-password/**"
                         ).permitAll()
                         .pathMatchers(
                                 "/profile/**",
