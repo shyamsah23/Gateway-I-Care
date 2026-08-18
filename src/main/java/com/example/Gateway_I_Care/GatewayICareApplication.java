@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GatewayICareApplication {
 
 	public static void main(String[] args) {
+		System.out.println("Commit-1");
+		
 		SpringApplication.run(GatewayICareApplication.class, args);
 	}
 
